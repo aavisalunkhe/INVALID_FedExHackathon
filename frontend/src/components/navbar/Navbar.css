@@ -1,0 +1,40 @@
+.header{
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 10%;
+    background: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.name{
+    font-size: 20px;
+    color: white;   
+}
+
+.navbar a{
+    position: relative;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.523);
+    font-weight: 500;
+    margin-left: 45px;
+}
+
+.navbar a::before{
+    content: "";
+    position: absolute;
+    top: 100%;
+    width: 0%;
+    height: 2px;
+    background: white;
+    transition: 0.3s;
+}
+
+.navbar a:hover::before{
+    width: 100%;
+    color: rgb(255, 255, 255);
+}
