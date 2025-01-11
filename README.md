@@ -1,6 +1,7 @@
 # Dynamic Route Optimizatoin & Emissions Reduction system
 A Python & React based System with a Beautiful Design that Ranks Routes based on User Priority taking into account various factors like Real-Time Traffic, Emissions, Weather Conditions, Travel Time & Travel Distance 
 
+![Demo](readmeContent/INVALID_FedExHackathonGIF.gif)
 
 ## Ranking Routes
 ### Step 1: Determining Factors
@@ -66,7 +67,7 @@ It is important to calculate Fuel Consumption as it helps us determine the Emiss
 - Fuel Consumption is calculated using the Following Formula:-
 <br>
 
-![Screenshot 2025-01-10 202948](https://github.com/user-attachments/assets/4ee85f04-7d01-4130-a081-c736fe105e88)
+![Fuel Consumption](readmeContent/Fuel%20Consumption.png)
 <br>
 
 The Fuel Efficiency is already predefined based on the Vehicle Class set by the user in the Frontend.
@@ -76,8 +77,7 @@ This Fuel Consumption is then Adjusted to the Cargo Weight(set by the user via F
 <br>
 - Adjusted Fuel Consumption (AE) is given by the Formula:-
 
-
-![Adjusted Fuel Consumption](https://github.com/user-attachments/assets/060d4505-9015-484c-934a-cb582c8fbfc8)
+![Adjusted Fuel Consumption](readmeContent/Adjusted%20Fuel%20Consumption.png)
 <br>
 
 Where,
@@ -95,7 +95,7 @@ Next, we calculate the Emissions....
 - Emissions are given by the Formula:-
 <br>
 
-![Emissions](https://github.com/user-attachments/assets/1043f428-a6ca-4f10-bc55-80c22708a02c)
+![Emissions](readmeContent/Emissions.png)
 <br>
 
 
@@ -111,17 +111,17 @@ Weights are normalized by Dividing a particular weight for a factor by the sum o
 Better understood by the following Formulas:-
 <br>
 
-![Summation of Weights](https://github.com/user-attachments/assets/1e458d6f-6407-4919-b38c-d96da3d40c18)
+![Summation of Weights](readmeContent/Summation%20of%20Weights.png)
 <br>
 
-![Normalized Weight](https://github.com/user-attachments/assets/c5d8421b-4295-40ae-918f-8c59ec82069b)
+![Normalized Weight](readmeContent/Normalized%20Weight.png)
 <br>
 
 
 3. Finally the Score for each Route is computed by the following Formula:-
 <br>
 
-![Route Score](https://github.com/user-attachments/assets/48b36136-0a54-4898-bdec-9cd60ce89a23)
+![Route Score](readmeContent/Route%20Score.png)
 <br>
 
 The Routes are then ranked based on their Scores(Lower is Better)
@@ -136,4 +136,6 @@ The model is included in this repository and can be found using the name, 'FedEx
 We plan on implementing this on a wider scale by Simulating Real-Time change in Location & then using this data to dynamically update routes, predict Real-Time Weather Impact & Traffic Conditions. \
 - Building a Carbon Footprint Dashboard giving detailed insights about Emissions per Route
 
-## Demo
+## Demo Video
+
+![Demo Video](readmeContent/INVALID_FedExHackathonDemo.mp4)
