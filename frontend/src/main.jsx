@@ -17,8 +17,8 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <CssBaseline/>
-        <Navbar/>
+        <CssBaseline />
+        <Navbar />
         <App />
       </ThemeProvider>
     </BrowserRouter>

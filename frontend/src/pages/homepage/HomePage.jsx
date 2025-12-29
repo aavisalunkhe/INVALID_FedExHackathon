@@ -6,60 +6,60 @@ import AirportShuttleOutlinedIcon from "@mui/icons-material/AirportShuttleOutlin
 import axios from 'axios';
 import OptimRoute from "../optimRoute/optimRoute.jsx";
 
-function HomePage(){
-  const [vehicle, setVehicle]= useState("");
-  const [source, setSource]= useState("");
-  const [sourceSuggestion, setSourceSuggestion]= useState([]);
-  const [destination, setDestination]= useState("");
-  const [destinationSuggestion, setDestinationSuggestion]= useState([]);
-  const [efficiency, setEfficiency]= useState("Default");
-  const [cargo, setCargo]= useState("");
-  const [routeData, setRouteData]= useState(null);
-  const [isLoading, setLoading]= useState(false);
+function HomePage() {
+  const [vehicle, setVehicle] = useState("");
+  const [source, setSource] = useState("");
+  const [sourceSuggestion, setSourceSuggestion] = useState([]);
+  const [destination, setDestination] = useState("");
+  const [destinationSuggestion, setDestinationSuggestion] = useState([]);
+  const [efficiency, setEfficiency] = useState("Default");
+  const [cargo, setCargo] = useState("");
+  const [routeData, setRouteData] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
-  const handleUseMyLocation= async function(){
-    if(navigator.geolocation){
+  const handleUseMyLocation = async function () {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        async function(position){
-          const {latitude, longitude}= position.coords;
-          try{
-            const response= await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
+        async function (position) {
+          const { latitude, longitude } = position.coords;
+          try {
+            const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
             setSource(response.data.display_name);
-          }catch(error){
+          } catch (error) {
             console.error("fetching location failed :|")
           }
         })
-    }else {
+    } else {
       alert("geolocation error");
     }
   }
 
-  const fetchSuggestion= async function(input, setSuggestion){
-    if(!input){
+  const fetchSuggestion = async function (input, setSuggestion) {
+    if (!input) {
       return setSuggestion([]);
     }
-    try{
-      const resp= await axios.get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(input)}&format=json`)
-      const suggest= resp.data.map((result)=>{
+    try {
+      const resp = await axios.get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(input)}&format=json`)
+      const suggest = resp.data.map((result) => {
         return result.display_name
       })
       setSuggestion(suggest);
-    }catch(error){
+    } catch (error) {
       console.error("fetching suggeestions failed :|");
     }
   }
 
-  const handleVehicle= function(vehicle){
+  const handleVehicle = function (vehicle) {
     setVehicle(vehicle);
   }
 
-  const fetchCoordinates= async (address) => {
+  const fetchCoordinates = async (address) => {
     try {
-      const response= await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`);
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`);
       if (!response.ok) {
         throw new Error('Failed to fetch coordinates');
       }
-      const data= await response.json();
+      const data = await response.json();
       if (data && data.length > 0) {
         return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
       } else {
@@ -71,16 +71,16 @@ function HomePage(){
     }
   }
 
-  const handleSubmit= async function(event){
+  const handleSubmit = async function (event) {
     console.log("Form submitted");
     event.preventDefault();
     setLoading(true);
     setRouteData(null);
 
-    try{
+    try {
       const sourceCoords = await fetchCoordinates(source);
       const destinationCoords = await fetchCoordinates(destination);
-      const formData= {
+      const formData = {
         vehicle,
         source: `${sourceCoords.lat},${sourceCoords.lon}`,
         destination: `${destinationCoords.lat},${destinationCoords.lon}`,
@@ -88,41 +88,42 @@ function HomePage(){
         cargo,
       }
       console.log(formData);
-      const response= await fetch("http://localhost:5000/getformdata", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const response = await fetch(`${apiUrl}/getformdata`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-    });
-  
-    const result = await response.json();
-    console.log("Response from backend:", result);
-    setRouteData(result);
-    
-    }catch(error) {
+      });
+
+      const result = await response.json();
+      console.log("Response from backend:", result);
+      setRouteData(result);
+
+    } catch (error) {
       console.error("Error submitting form:", error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <Box
-      display= "flex"
-      height= "100vh"
+      display="flex"
+      height="100vh"
     >
       <Box
-        flex= {1}
-        padding= {20}
-        paddingTop= {10}
-        bgcolor= "#f9f9f9"
-        display= "flex"
-        flexDirection= "column"
-        justifyContent= "center"
+        flex={1}
+        padding={20}
+        paddingTop={10}
+        bgcolor="#f9f9f9"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
       >
         <Typography
-          variant= "h4"
+          variant="h4"
           gutterBottom
-          sx= {{
+          sx={{
             color: "black",
             fontWeight: "bold",
           }}
@@ -131,25 +132,25 @@ function HomePage(){
         </Typography>
 
         <Box
-          component= "form"
+          component="form"
           onSubmit={handleSubmit}
-          display= "flex"
-          flexDirection= "column"
-          gap= {3}
-          paddingTop= "5%"
+          display="flex"
+          flexDirection="column"
+          gap={3}
+          paddingTop="5%"
         >
           <Box
-            display= "flex"
-            justifyContent= "space-between"
-            gap= {2}
+            display="flex"
+            justifyContent="space-between"
+            gap={2}
           >
             <Button
-              onClick= {function(){
+              onClick={function () {
                 handleVehicle("Car")
               }}
-              sx= {{
-                color: vehicle=="Car"?"white": "black",
-                backgroundColor: vehicle ==="Car"?"black": "transparent",
+              sx={{
+                color: vehicle == "Car" ? "white" : "black",
+                backgroundColor: vehicle === "Car" ? "black" : "transparent",
                 border: "1px solid black",
                 width: 100,
                 height: 100,
@@ -171,17 +172,17 @@ function HomePage(){
                 },
               }}
             >
-              <DirectionsCarOutlinedIcon className= "icon" />
-              <Typography className= "text">Car</Typography>
+              <DirectionsCarOutlinedIcon className="icon" />
+              <Typography className="text">Car</Typography>
             </Button>
 
             <Button
-              onClick= {function(){
+              onClick={function () {
                 handleVehicle("Van")
               }}
-              sx= {{
-                color: vehicle=="Van"?"white":"black",
-                backgroundColor: vehicle ==="Van"?"black": "transparent",
+              sx={{
+                color: vehicle == "Van" ? "white" : "black",
+                backgroundColor: vehicle === "Van" ? "black" : "transparent",
                 border: "1px solid black",
                 width: 100,
                 height: 100,
@@ -203,17 +204,17 @@ function HomePage(){
                 },
               }}
             >
-              <AirportShuttleOutlinedIcon className= "icon" />
-              <Typography className= "text">Van</Typography>
+              <AirportShuttleOutlinedIcon className="icon" />
+              <Typography className="text">Van</Typography>
             </Button>
 
             <Button
-              onClick= {function(){
+              onClick={function () {
                 handleVehicle("Truck")
               }}
-              sx= {{
-                color: vehicle=="Truck"?"white":"black",
-                backgroundColor: vehicle ==="Truck"?"black": "transparent",
+              sx={{
+                color: vehicle == "Truck" ? "white" : "black",
+                backgroundColor: vehicle === "Truck" ? "black" : "transparent",
                 border: "1px solid black",
                 width: 100,
                 height: 100,
@@ -235,51 +236,51 @@ function HomePage(){
                 },
               }}
             >
-              <LocalShippingOutlinedIcon className= "icon" />
-              <Typography className= "text">Truck</Typography>
+              <LocalShippingOutlinedIcon className="icon" />
+              <Typography className="text">Truck</Typography>
             </Button>
           </Box>
           {/*source section structure: flex box-> textfield(-> get the suggestions-> display in a list)
           ke side pe ek button for location(-> get the location)*/}
           <Box
-            position= "relative"
+            position="relative"
             display="flex"
             flexDirection="column"
-            gap={3} 
+            gap={3}
             paddingTop="5%"
           >
             <Box>
               <TextField
-              label= "Source"
-              variant= "outlined"
-              fullWidth
-              value= {source}
-              onChange= {function(e){
-                setSource(e.target.value);
-                fetchSuggestion(e.target.value, setSourceSuggestion);
-              }}
-              InputLabelProps= {{
-                style: {
-                  color: "black",
-                },
-              }}
-              sx= {{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "black",
+                label="Source"
+                variant="outlined"
+                fullWidth
+                value={source}
+                onChange={function (e) {
+                  setSource(e.target.value);
+                  fetchSuggestion(e.target.value, setSourceSuggestion);
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: "black",
                   },
-                  "&:hover fieldset": {
-                    borderColor: "black",
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "black",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "black",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "black",
+                    },
                   },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "black",
-                  },
-                },
-              }}
+                }}
               />
               <Button
-                onClick= {handleUseMyLocation}
-                sx={{ 
+                onClick={handleUseMyLocation}
+                sx={{
                   position: "absolute",
                   top: "5px",
                   right: "10px",
@@ -289,7 +290,7 @@ function HomePage(){
               >
                 Use My Location
               </Button>
-              {sourceSuggestion.length> 0&& (
+              {sourceSuggestion.length > 0 && (
                 <List
                   sx={{
                     position: "absolute",
@@ -304,7 +305,7 @@ function HomePage(){
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
                   }}
                 >
-                  {sourceSuggestion.map((suggestion, index)=> (
+                  {sourceSuggestion.map((suggestion, index) => (
                     <ListItem
                       button="true"
                       key={index}
@@ -320,23 +321,23 @@ function HomePage(){
               )}
             </Box>
           </Box>
-          
+
           <Box position="relative">
             <TextField
-              label= "Destination"
-              variant= "outlined"
+              label="Destination"
+              variant="outlined"
               fullWidth
-              value= {destination}
-              onChange= {function(e){
+              value={destination}
+              onChange={function (e) {
                 setDestination(e.target.value)
                 fetchSuggestion(e.target.value, setDestinationSuggestion)
               }}
-              InputLabelProps= {{
+              InputLabelProps={{
                 style: {
                   color: "black",
                 },
               }}
-              sx= {{
+              sx={{
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: "black",
@@ -350,7 +351,7 @@ function HomePage(){
                 },
               }}
             />
-            {destinationSuggestion.length> 0&& (
+            {destinationSuggestion.length > 0 && (
               <List
                 sx={{
                   position: "absolute",
@@ -382,19 +383,19 @@ function HomePage(){
           </Box>
 
           <TextField
-            label= "Cargo Weight in Kgs"
-            variant= "outlined"
+            label="Cargo Weight in Kgs"
+            variant="outlined"
             fullWidth
-            value= {cargo}
-            onChange= {function(e){
+            value={cargo}
+            onChange={function (e) {
               setCargo(e.target.value)
             }}
-            InputLabelProps= {{
+            InputLabelProps={{
               style: {
                 color: "black",
               },
             }}
-            sx= {{
+            sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "black",
@@ -410,12 +411,12 @@ function HomePage(){
           />
 
           <Select
-            value= {efficiency}
-            onChange= {function(e){
+            value={efficiency}
+            onChange={function (e) {
               setEfficiency(e.target.value)
             }}
             fullWidth
-            sx= {{
+            sx={{
               color: "black",
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "black",
@@ -428,16 +429,16 @@ function HomePage(){
               },
             }}
           >
-            <MenuItem value= "Eco">Energy-Efficient</MenuItem>
-            <MenuItem value= "Default">Time-Efficient</MenuItem>
-            <MenuItem value= "Distance">Distance-Efficient</MenuItem>
+            <MenuItem value="Eco">Energy-Efficient</MenuItem>
+            <MenuItem value="Default">Time-Efficient</MenuItem>
+            <MenuItem value="Distance">Distance-Efficient</MenuItem>
           </Select>
 
           <Button
-            variant= "contained"
-            size= "large"
-            type= "submit"
-            sx= {{
+            variant="contained"
+            size="large"
+            type="submit"
+            sx={{
               backgroundColor: "black",
               "&:hover": {
                 backgroundColor: "gray",
@@ -449,17 +450,17 @@ function HomePage(){
         </Box>
       </Box>
       <Box
-        flex= {2}
-        position= "relative"
+        flex={2}
+        position="relative"
         padding={5}
         alignItems={"center"}
-        justifyContent= "center"
-      > 
-        <OptimRoute 
-         routeData={routeData}
-         isLoading={isLoading} 
+        justifyContent="center"
+      >
+        <OptimRoute
+          routeData={routeData}
+          isLoading={isLoading}
         />
-        {/* https://api.tomtom.com/map/1/tile/basic/main/4/8/5.jpg?key=WIySrpsxZ0ZLgz3PbiASsZ7ETYatgGGE&tileSize=256&view=IN&language=NGT */}
+
       </Box>
     </Box>
   )
