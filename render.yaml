@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: fedex-backend
+    plan: free
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn fedex:app
+    envVars:
+      - key: TOMTOM_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+  - type: web
+    name: fedex-frontend
+    plan: free
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist -l $PORT
+    envVars:
+      - key: VITE_API_URL_HOST
+        fromService:
+          type: web
+          name: fedex-backend
+          property: host

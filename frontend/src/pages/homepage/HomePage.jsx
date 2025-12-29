@@ -88,7 +88,8 @@ function HomePage() {
         cargo,
       }
       console.log(formData);
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const apiHost = import.meta.env.VITE_API_URL_HOST;
+      const apiUrl = apiHost ? `https://${apiHost}` : (import.meta.env.VITE_API_URL || "http://localhost:5000");
       const response = await fetch(`${apiUrl}/getformdata`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
