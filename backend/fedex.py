@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Constants
-TOMTOM_API_KEY = os.getenv('TOMTOM_API_KEY', 'NYXIq2P7vjaGGK26Feu4r7esfl1aCKxj')
+TOMTOM_API_KEY = os.getenv('TOMTOM_API_KEY')
 AVERAGE_WEIGHT = {'Van': 3000, 'Truck': 7500}
 AVERAGE_FUEL_EFFICIENCY = {'Van': 15, 'Truck': 7}
 EMISSION_FACTOR = {'Diesel': 2.65, 'Petrol': 2.35}
